@@ -1,15 +1,47 @@
 // Core
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
+import { connect } from 'react-redux';
 
 // Instruments
 import Styles from './styles.m.css';
 import { tasks } from './tasks';
+import { tasksActions } from '../../bus/tasks/actions'
 
 // Components
 import Task from '../Task';
 import Checkbox from '../../theme/assets/Checkbox';
+import bindActionCreators from "redux/src/bindActionCreators";
+
+
+const mapStateToProps = (state) => {
+    return {
+        tasks: state.tasks,
+    };
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        actions: bindActionCreators(
+            {
+                createTaskAsync: tasksActions.createTaskAsync,
+            },
+            dispatch),
+    };
+};
+
+@connect(
+    mapStateToProps,
+    mapDispatchToProps,
+)
 
 export default class Scheduler extends Component {
+    createTaskInput = createRef();
+
+    _createTask = (e) => {
+        e.preventDefault();
+        this.props.actions.createTaskAsync(this.createTaskInput.current.value);
+    };
+
     render () {
         const todoList = tasks.map((task) => (
             <Task
@@ -36,8 +68,9 @@ export default class Scheduler extends Component {
                                 maxLength = { 50 }
                                 placeholder = 'Описание моей новой задачи'
                                 type = 'text'
+                                ref={ this.createTaskInput }
                             />
-                            <button>Добавить задачу</button>
+                            <button onClick={this._createTask} type="submit">Добавить задачу</button>
                         </form>
                         <div className = { Styles.overlay }>
                             <ul>{todoList}</ul>
