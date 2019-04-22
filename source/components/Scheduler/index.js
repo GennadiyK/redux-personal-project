@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 
 // Instruments
 import Styles from './styles.m.css';
-import { tasks } from './tasks';
 import { tasksActions } from '../../bus/tasks/actions'
 
 // Components
@@ -23,6 +22,7 @@ const mapDispatchToProps = (dispatch) => {
     return {
         actions: bindActionCreators(
             {
+                fetchTasks: tasksActions.fetchTasks,
                 createTaskAsync: tasksActions.createTaskAsync,
             },
             dispatch),
@@ -42,17 +42,25 @@ export default class Scheduler extends Component {
         this.props.actions.createTaskAsync(this.createTaskInput.current.value);
     };
 
+    componentDidMount () {
+        const { actions } = this.props;
+
+        actions.fetchTasks();
+    }
+
     render () {
-        const todoList = tasks.map((task) => (
-            <Task
-                completed = { task.completed }
-                favorite = { task.favorite }
-                id = { task.id }
-                key = { task.id }
-                message = { task.message }
-                { ...task }
-            />
-        ));
+        const { tasks } = this.props;
+        console.log('tasks---->', tasks)
+        const todoList = tasks.map((task) => {
+            return (<Task
+                completed={task.get('completed')}
+                favorite={task.get('favorite')}
+                id={task.get('id')}
+                key={task.get('id')}
+                message={task.get('message')}
+                {...task}
+            />)
+        });
 
         return (
             <section className = { Styles.scheduler }>

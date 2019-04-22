@@ -1,5 +1,7 @@
 export const types = {
     CREATE_TASK: 'CREATE_TASK',
+    FETCH_TASKS: 'FETCH_TASKS',
+    FILL_TASKS: 'FILL_TASKS',
 
     CREATE_TASK_ASYNC: 'CREATE_TASK_ASYNC',
 };

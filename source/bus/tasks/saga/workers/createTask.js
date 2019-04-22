@@ -14,8 +14,7 @@ export function* createTask({payload: task}) {
         if (response.status !== 200) {
             throw new Error( message );
         }
-
-        yield put(tasksActions.createTask(data.message));
+        yield put(tasksActions.createTask(data));
 
     } catch (e) {
      // yield put(uiActions.emitError(e , ' worker'));

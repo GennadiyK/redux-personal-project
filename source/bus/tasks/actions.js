@@ -7,6 +7,20 @@ export const tasksActions = {
             payload: task
         };
     },
+    fillTasks: (tasks) => {
+        console.log('fillTasks', tasks)
+        return {
+            type:    types.FILL_TASKS,
+            payload: tasks,
+        };
+    },
+    fetchTasks: () => async (dispatch) => {
+        dispatch({
+            type: types.FETCH_TASKS,
+        });
+    },
+
+
     createTaskAsync: (task)=> {
         return {
             type: types.CREATE_TASK_ASYNC,
