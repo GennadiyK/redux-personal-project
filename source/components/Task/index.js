@@ -2,6 +2,10 @@
 import React, { PureComponent } from 'react';
 import cx from 'classnames';
 
+import { connect } from 'react-redux';
+import bindActionCreators from "redux/src/bindActionCreators";
+import { tasksActions } from '../../bus/tasks/actions';
+
 // Instruments
 import Styles from './styles.m.css';
 
@@ -11,7 +15,27 @@ import Remove from '../../theme/assets/Remove';
 import Edit from '../../theme/assets/Edit';
 import Star from '../../theme/assets/Star';
 
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        actions: bindActionCreators(
+            {
+                removeTaskAsync: tasksActions.removeTaskAsync,
+            },
+            dispatch),
+    };
+};
+
+@connect(
+    null,
+    mapDispatchToProps,
+)
+
 export default class Task extends PureComponent {
+    _removeTask = () => {
+       const { id, actions: {removeTaskAsync} } = this.props;
+        removeTaskAsync(id);
+    }
     render () {
         const { message, completed } = this.props;
 
@@ -47,6 +71,7 @@ export default class Task extends PureComponent {
                     />
                     <Remove
                         inlineBlock
+                        onClick={this._removeTask}
                         className = { Styles.removeTask }
                         color1 = '#3B8EF3'
                         color2 = '#000'

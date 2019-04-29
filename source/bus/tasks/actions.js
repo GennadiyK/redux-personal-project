@@ -7,8 +7,13 @@ export const tasksActions = {
             payload: task
         };
     },
+    removeTask: (taskId)=> {
+        return {
+            type: types.REMOVE_TASK,
+            payload: taskId
+        };
+    },
     fillTasks: (tasks) => {
-        console.log('fillTasks', tasks)
         return {
             type:    types.FILL_TASKS,
             payload: tasks,
@@ -25,6 +30,12 @@ export const tasksActions = {
         return {
             type: types.CREATE_TASK_ASYNC,
             payload: task,
+        };
+    },
+    removeTaskAsync: (taskId)=> {
+        return {
+            type: types.REMOVE_TASK_ASYNC,
+            payload: taskId
         };
     },
 };

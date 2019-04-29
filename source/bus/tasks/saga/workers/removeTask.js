@@ -3,22 +3,22 @@ import { tasksActions} from '../../actions';
 import { put, apply } from 'redux-saga/effects';
 import { uiActions } from '../../../ui/actions';
 
-export function* createTask({payload: task}) {
+export function* removeTask({payload: id}) {
     try {
          yield put(uiActions.startFetching());
 
-        const response = yield apply(api, api.tasks.create, [task]);
+        const response = yield apply(api, api.tasks.remove, [id]);
 
-        const { data, message } = yield apply(response, response.json);
 
-        if (response.status !== 200) {
+        if (response.status !== 204) {
+            const { message } = yield apply(response, response.json);
             throw new Error( message );
         }
-        yield put(tasksActions.createTask(data));
+        yield put(tasksActions.removeTask(id));
         yield put(uiActions.stopFetching());
 
     } catch (e) {
-     yield put(uiActions.emitError(e , ' createTask worker'));
+     yield put(uiActions.emitError(e , ' removeTask worker'));
     } finally {
         yield put(uiActions.stopFetching());
     }

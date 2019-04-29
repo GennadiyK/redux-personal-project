@@ -13,6 +13,15 @@ export const api = {
                 }
             );
         },
+        remove (id) {
+            return fetch(`${MAIN_URL}/${id}`, {
+                    method:   'DELETE',
+                    headers: {
+                        'Authorization': TOKEN,
+                    },
+                }
+            );
+        },
         fetch () {
             return fetch(`${MAIN_URL}/`, {
                 method:   'GET',

@@ -50,7 +50,6 @@ export default class Scheduler extends Component {
 
     render () {
         const { tasks } = this.props;
-        console.log('tasks---->', tasks)
         const todoList = tasks.map((task) => {
             return (<Task
                 completed={task.get('completed')}
