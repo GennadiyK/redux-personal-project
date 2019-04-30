@@ -31,5 +31,16 @@ export const api = {
                 }
             );
         },
+        edit ({id, message}) {
+            return fetch(`${MAIN_URL}/`, {
+                    method:   'PUT',
+                    body:    JSON.stringify([{id: id, message: message, completed: false, favorite: false}]),
+                    headers: {
+                        'Authorization': TOKEN,
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
+        },
     },
 };

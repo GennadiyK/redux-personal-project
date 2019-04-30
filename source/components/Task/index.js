@@ -20,7 +20,7 @@ const mapDispatchToProps = (dispatch) => {
     return {
         actions: bindActionCreators(
             {
-                removeTaskAsync: tasksActions.removeTaskAsync,
+                ...tasksActions,
             },
             dispatch),
     };
@@ -32,12 +32,46 @@ const mapDispatchToProps = (dispatch) => {
 )
 
 export default class Task extends PureComponent {
+    inputFieldRef = React.createRef()
+
+    constructor (props) {
+        super(props);
+        this.state = {
+            value: ''
+        }
+    }
+
+    componentDidMount () {
+        const { message } = this.props;
+        this.setState({value: message})
+    }
+
+    _changeValue = (e) => {
+        this.setState({value: e.target.value})
+    }
+
     _removeTask = () => {
        const { id, actions: {removeTaskAsync} } = this.props;
-        removeTaskAsync(id);
+        removeTaskAsync(id, message);
     }
+
+    _editTask = () => {
+        const { id, actions: {editTaskAsync} } = this.props;
+        this.inputFieldRef.current.disabled = false;
+        this.inputFieldRef.current.focus()
+
+        document.addEventListener('keypress', (event) => {
+            if(event.keyCode === 13) {
+                const message = this.inputFieldRef.current.value;
+                this.inputFieldRef.current.disabled = true;
+                editTaskAsync({id, message})
+
+            }
+        });
+    }
+
     render () {
-        const { message, completed } = this.props;
+        const { completed } = this.props;
 
         const styles = cx(Styles.task, {
             [Styles.completed]: completed,
@@ -52,7 +86,7 @@ export default class Task extends PureComponent {
                         color1 = '#3B8EF3'
                         color2 = '#FFF'
                     />
-                    <input disabled type = 'text' value = { message } />
+                    <input disabled type = 'text' value = { this.state.value } ref = { this.inputFieldRef } onChange={this._changeValue}/>
                 </div>
                 <div className = { Styles.actions }>
                     <Star
@@ -66,6 +100,7 @@ export default class Task extends PureComponent {
                         inlineBlock
                         checked = { false }
                         className = { Styles.updateTaskMessageOnClick }
+                        onClick={this._editTask}
                         color1 = '#3B8EF3'
                         color2 = '#000'
                     />

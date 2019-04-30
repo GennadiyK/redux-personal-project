@@ -13,6 +13,12 @@ export const tasksActions = {
             payload: taskId
         };
     },
+    editTask: (taskData)=> {
+        return {
+            type: types.EDIT_TASKS,
+            payload: taskData
+        };
+    },
     fillTasks: (tasks) => {
         return {
             type:    types.FILL_TASKS,
@@ -38,4 +44,10 @@ export const tasksActions = {
             payload: taskId
         };
     },
+    editTaskAsync: (taskData)=> {
+        return {
+            type: types.EDIT_TASKS_ASYNC,
+            payload: taskData
+        };
+    }
 };
