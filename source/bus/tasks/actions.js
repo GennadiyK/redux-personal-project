@@ -15,8 +15,14 @@ export const tasksActions = {
     },
     editTask: (taskData)=> {
         return {
-            type: types.EDIT_TASKS,
+            type: types.EDIT_TASK,
             payload: taskData
+        };
+    },
+    editingTask: (id)=> {
+        return {
+            type: types.EDITING_TASK,
+            payload: id
         };
     },
     fillTasks: (tasks) => {
@@ -46,7 +52,7 @@ export const tasksActions = {
     },
     editTaskAsync: (taskData)=> {
         return {
-            type: types.EDIT_TASKS_ASYNC,
+            type: types.EDIT_TASK_ASYNC,
             payload: taskData
         };
     }

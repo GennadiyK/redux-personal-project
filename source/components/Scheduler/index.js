@@ -14,6 +14,7 @@ import bindActionCreators from "redux/src/bindActionCreators";
 
 const mapStateToProps = (state) => {
     return {
+        editingId: state.tasks.editingId,
         tasks: state.tasks,
     };
 };
@@ -22,8 +23,7 @@ const mapDispatchToProps = (dispatch) => {
     return {
         actions: bindActionCreators(
             {
-                fetchTasks: tasksActions.fetchTasks,
-                createTaskAsync: tasksActions.createTaskAsync,
+                ...tasksActions,
             },
             dispatch),
     };
@@ -39,7 +39,11 @@ export default class Scheduler extends Component {
 
     _createTask = (e) => {
         e.preventDefault();
-        this.props.actions.createTaskAsync(this.createTaskInput.current.value);
+
+        if(!!this.createTaskInput.current.value) {
+            this.props.actions.createTaskAsync(this.createTaskInput.current.value);
+        }
+
     };
 
     componentDidMount () {
@@ -49,13 +53,16 @@ export default class Scheduler extends Component {
     }
 
     render () {
-        const { tasks } = this.props;
-        const todoList = tasks.map((task) => {
+        const { tasks: {list}, editingId } = this.props;
+
+        const todoList = list.map((task) => {
+
             return (<Task
                 completed={task.get('completed')}
                 favorite={task.get('favorite')}
                 id={task.get('id')}
                 key={task.get('id')}
+                editing = {editingId === task.get('id')}
                 message={task.get('message')}
                 {...task}
             />)

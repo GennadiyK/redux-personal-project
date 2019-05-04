@@ -15,7 +15,6 @@ import Remove from '../../theme/assets/Remove';
 import Edit from '../../theme/assets/Edit';
 import Star from '../../theme/assets/Star';
 
-
 const mapDispatchToProps = (dispatch) => {
     return {
         actions: bindActionCreators(
@@ -32,12 +31,13 @@ const mapDispatchToProps = (dispatch) => {
 )
 
 export default class Task extends PureComponent {
-    inputFieldRef = React.createRef()
+    inputFieldRef = React.createRef();
 
     constructor (props) {
         super(props);
         this.state = {
-            value: ''
+            value: '',
+            toggleEdit: false
         }
     }
 
@@ -52,30 +52,41 @@ export default class Task extends PureComponent {
 
     _removeTask = () => {
        const { id, actions: {removeTaskAsync} } = this.props;
-        removeTaskAsync(id, message);
+        removeTaskAsync(id);
     }
 
     _editTask = () => {
-        const { id, actions: {editTaskAsync} } = this.props;
-        this.inputFieldRef.current.disabled = false;
-        this.inputFieldRef.current.focus()
+        const { id, actions: {editingTask }} = this.props;
+        const { toggleEdit } = this.state;
+        this.setState({toggleEdit: !toggleEdit});
+        editingTask(id);
+    }
 
+
+    _submitField = () => {
+        const { id, actions: {editTaskAsync} } = this.props;
         document.addEventListener('keypress', (event) => {
             if(event.keyCode === 13) {
                 const message = this.inputFieldRef.current.value;
-                this.inputFieldRef.current.disabled = true;
-                editTaskAsync({id, message})
+                this.inputFieldRef.current.disable = false;
+                editTaskAsync({id, message});
 
             }
         });
     }
 
-    render () {
-        const { completed } = this.props;
+    componentDidUpdate(prevProps) {
+        console.log(this.props, prevProps)
+        if(this.props.editing !== prevProps.editing) {
+            this.inputFieldRef.current.focus();
+        }
+    }
 
-        const styles = cx(Styles.task, {
+    render () {
+        const { completed, editing } = this.props;
+        const styles = cx(Styles.task,  {
             [Styles.completed]: completed,
-        });
+        } );
 
         return (
             <li className = { styles }>
@@ -86,7 +97,13 @@ export default class Task extends PureComponent {
                         color1 = '#3B8EF3'
                         color2 = '#FFF'
                     />
-                    <input disabled type = 'text' value = { this.state.value } ref = { this.inputFieldRef } onChange={this._changeValue}/>
+                    <input type = 'text'
+                           value = { this.state.value }
+                           ref = { this.inputFieldRef }
+                           onChange = { this._changeValue }
+                           onFocus = { this._submitField }
+                           disabled={!editing }
+                    />
                 </div>
                 <div className = { Styles.actions }>
                     <Star

@@ -15,7 +15,6 @@ export function* createTask({payload: task}) {
             throw new Error( message );
         }
         yield put(tasksActions.createTask(data));
-        yield put(uiActions.stopFetching());
 
     } catch (e) {
      yield put(uiActions.emitError(e , ' createTask worker'));

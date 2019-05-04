@@ -13,7 +13,6 @@ export function* editTask({payload: {id, message}}) {
            Error( resMessage );
         }
         yield put(tasksActions.editTask({id, resMessage}));
-        yield put(uiActions.stopFetching());
 
     } catch (e) {
      yield put(uiActions.emitError(e , ' editTask worker'));

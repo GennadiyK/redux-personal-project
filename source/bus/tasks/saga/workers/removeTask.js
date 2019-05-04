@@ -15,7 +15,6 @@ export function* removeTask({payload: id}) {
             throw new Error( message );
         }
         yield put(tasksActions.removeTask(id));
-        yield put(uiActions.stopFetching());
 
     } catch (e) {
      yield put(uiActions.emitError(e , ' removeTask worker'));

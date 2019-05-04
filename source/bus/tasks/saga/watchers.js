@@ -15,7 +15,7 @@ export function* watchRemoveTasks() {
 }
 
 export function* watchEditTasks() {
-    yield takeEvery(types.EDIT_TASKS_ASYNC, editTask);
+    yield takeEvery(types.EDIT_TASK_ASYNC, editTask);
 }
 
 export function* watchTasks() {
