@@ -14,7 +14,7 @@ export function* removeTask({payload: id}) {
             const { message } = yield apply(response, response.json);
             throw new Error( message );
         }
-        yield put(tasksActions.removeTask(id));
+        yield put(tasksActions.removeTask({id}));
 
     } catch (e) {
      yield put(uiActions.emitError(e , ' removeTask worker'));
