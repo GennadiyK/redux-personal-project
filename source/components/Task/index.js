@@ -45,8 +45,8 @@ export default class Task extends PureComponent {
     }
 
     componentDidMount () {
-        const { message } = this.props;
-        this.setState({value: message})
+        const { message} = this.props;
+        this.setState({value: message });
     }
 
     _changeValue = (e) => {
@@ -68,19 +68,19 @@ export default class Task extends PureComponent {
 
 
     _submitField = () => {
-        const { id, actions: {editTaskAsync} } = this.props;
+        const { id, actions: {updateTaskAsync} } = this.props;
         const { toggleEdit, completed, favorite } = this.state;
         document.addEventListener('keypress', (event) => {
             if(event.keyCode === 13) {
                 const message = this.inputFieldRef.current.value;
-                editTaskAsync({id, message, completed, favorite });
+                updateTaskAsync({id, message, completed, favorite });
                 this.setState({toggleEdit: !toggleEdit});
             }
         });
     }
 
-    _updateTask = (id, completed, favorite, editTaskAsync) => {
-        editTaskAsync({
+    _updateTask = (id, completed, favorite, updateTaskAsync) => {
+        updateTaskAsync({
             id,
             message: this.inputFieldRef.current.value,
             completed: completed,
@@ -98,7 +98,8 @@ export default class Task extends PureComponent {
     }
 
     render () {
-        const { id, actions: {editTaskAsync} } = this.props;
+        const { id, actions: { updateTaskAsync } } = this.props;
+
         const {
             toggleEdit,
             completed,
@@ -118,7 +119,7 @@ export default class Task extends PureComponent {
                         color1 = '#3B8EF3'
                         color2 = '#FFF'
                         checked={completed}
-                        onClick = { this._updateTask.bind(null, id, !completed, favorite, editTaskAsync) }
+                        onClick = { this._updateTask.bind(null, id, !completed, favorite, updateTaskAsync) }
                     />
                     <input type = 'text'
                            value = { this.state.value }
@@ -135,7 +136,7 @@ export default class Task extends PureComponent {
                         className = { Styles.toggleTaskFavoriteState }
                         color1 = '#3B8EF3'
                         color2 = '#000'
-                        onClick = { this._updateTask.bind(null, id, completed, !favorite, editTaskAsync) }
+                        onClick = { this._updateTask.bind(null, id, completed, !favorite, updateTaskAsync) }
                     />
                     <Edit
                         inlineBlock

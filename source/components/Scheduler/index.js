@@ -36,7 +36,13 @@ const mapDispatchToProps = (dispatch) => {
 
 export default class Scheduler extends Component {
     createTaskInput = createRef();
+    constructor(props) {
+        super(props);
 
+        this.state = {
+            completedAll: false,
+        }
+    }
     _createTask = (e) => {
         e.preventDefault();
 
@@ -45,6 +51,12 @@ export default class Scheduler extends Component {
         }
 
     };
+    _toggleCompletedAll = (data) => {
+        const { completedAll } = this.state;
+        this.setState({
+            completedAll: !completedAll
+        })
+    }
 
     componentDidMount () {
         const { actions } = this.props;
@@ -54,6 +66,7 @@ export default class Scheduler extends Component {
 
     render () {
         const { tasks: {list}, editingId } = this.props;
+        const { completedAll} = this.state;
 
         const todoList = list.map((task) => {
 
@@ -91,7 +104,7 @@ export default class Scheduler extends Component {
                         </div>
                     </section>
                     <footer>
-                        <Checkbox checked color1 = '#363636' color2 = '#fff' />
+                        <Checkbox checked = { completedAll } onClick={ this._toggleCompletedAll } color1 = '#363636' color2 = '#fff' />
                         <span className = { Styles.completeAllTasks }>
                             Все задачи выполнены
                         </span>

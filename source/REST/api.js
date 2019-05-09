@@ -31,7 +31,7 @@ export const api = {
                 }
             );
         },
-        edit (requestData) {
+        update (requestData) {
             return fetch(`${MAIN_URL}/`, {
                     method:   'PUT',
                     body:    JSON.stringify([{...requestData}]),

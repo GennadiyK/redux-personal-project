@@ -30,7 +30,7 @@ export const tasksReducer = (state = initialState, action) => {
                     return item.get('id') !== action.payload.id;
                 }),
             }
-        case types.EDIT_TASK:
+        case types.UPDATE_TASK:
             return {
                 ...state,
                 list: state.list.update(

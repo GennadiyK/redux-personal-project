@@ -13,9 +13,9 @@ export const tasksActions = {
             payload: taskId
         };
     },
-    editTask: (taskData)=> {
+    updateTask: (taskData)=> {
         return {
-            type: types.EDIT_TASK,
+            type: types.UPDATE_TASK,
             payload: taskData
         };
     },
@@ -50,9 +50,9 @@ export const tasksActions = {
             payload: taskId
         };
     },
-    editTaskAsync: (taskData)=> {
+    updateTaskAsync: (taskData)=> {
         return {
-            type: types.EDIT_TASK_ASYNC,
+            type: types.UPDATE_TASK_ASYNC,
             payload: taskData
         };
     },
