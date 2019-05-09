@@ -55,5 +55,5 @@ export const tasksActions = {
             type: types.EDIT_TASK_ASYNC,
             payload: taskData
         };
-    }
+    },
 };

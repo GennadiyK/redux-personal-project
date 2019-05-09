@@ -3,19 +3,19 @@ import { tasksActions} from '../../actions';
 import { put, apply } from 'redux-saga/effects';
 import { uiActions } from '../../../ui/actions';
 
-export function* editTask({payload: {id, message}}) {
+export function* editTask({payload: {id, completed, message}}) {
     try {
          yield put(uiActions.startFetching());
-        const response = yield apply(api, api.tasks.edit, [{id, message}]);
+        const response = yield apply(api, api.tasks.edit, [{ id, completed, message }]);
 
-        const { resMessage } = yield apply(response, response.json);
+        const { message: resMessage } = yield apply(response, response.json);
         if (response.status !== 200) {
-           Error( resMessage );
+           throw new Error( resMessage );
         }
-        yield put(tasksActions.editTask({id, resMessage}));
+        yield put(tasksActions.editTask({ id, completed, message }));
 
     } catch (e) {
-     yield put(uiActions.emitError(e , ' editTask worker'));
+     yield put(uiActions.emitError(e , 'editTask worker'));
     } finally {
         yield put(uiActions.stopFetching());
     }

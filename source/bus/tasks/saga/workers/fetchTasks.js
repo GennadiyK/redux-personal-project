@@ -7,7 +7,7 @@ export function* fetchTasks() {
     try {
         const response = yield apply(api, api.tasks.fetch);
         const { data, message } = yield apply(response, response.json);
-console.log('fetchTasks',data)
+
         if (response.status !== 200) {
             throw new Error( message );
         }

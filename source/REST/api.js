@@ -31,10 +31,10 @@ export const api = {
                 }
             );
         },
-        edit ({id, message}) {
+        edit ({id, message, completed}) {
             return fetch(`${MAIN_URL}/`, {
                     method:   'PUT',
-                    body:    JSON.stringify([{id: id, message: message, completed: false, favorite: false}]),
+                    body:    JSON.stringify([{id: id, message: message, completed: completed, favorite: false}]),
                     headers: {
                         'Authorization': TOKEN,
                         'Content-Type': 'application/json',

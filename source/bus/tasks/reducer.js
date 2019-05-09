@@ -27,8 +27,15 @@ export const tasksReducer = (state = initialState, action) => {
             return {
                 ...state,
                 list: state.list.filter(( item ) => {
-                    return item.get('id') !== action.payload;
+                    return item.get('id') !== action.payload.id;
                 }),
+            }
+        case types.EDIT_TASK:
+            return {
+                ...state,
+                list: state.list.update(
+                    state.list.findIndex((task) => task.get('id') === action.payload.id),
+                    () => fromJS(action.payload)),
             }
         default:
             return state;
