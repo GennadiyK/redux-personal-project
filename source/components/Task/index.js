@@ -34,19 +34,19 @@ export default class Task extends PureComponent {
     inputFieldRef = React.createRef();
 
     constructor (props) {
-        const { editing, completed} = props;
+        const { editing, completed, favorite} = props;
         super(props);
         this.state = {
             value: '',
             toggleEdit: !editing,
             completed: completed,
+            favorite: favorite
         }
     }
 
     componentDidMount () {
         const { message } = this.props;
         this.setState({value: message})
-        console.log(this.state)
     }
 
     _changeValue = (e) => {
@@ -69,24 +69,27 @@ export default class Task extends PureComponent {
 
     _submitField = () => {
         const { id, actions: {editTaskAsync} } = this.props;
-        const { toggleEdit } = this.state;
+        const { toggleEdit, completed, favorite } = this.state;
         document.addEventListener('keypress', (event) => {
             if(event.keyCode === 13) {
                 const message = this.inputFieldRef.current.value;
-                editTaskAsync({id, message});
+                editTaskAsync({id, message, completed, favorite });
                 this.setState({toggleEdit: !toggleEdit});
             }
         });
     }
 
-    _completedTask = () => {
-        const { id, actions: {editTaskAsync} } = this.props;
-        const { completed } = this.state;
+    _updateTask = (id, completed, favorite, editTaskAsync) => {
+        editTaskAsync({
+            id,
+            message: this.inputFieldRef.current.value,
+            completed: completed,
+            favorite: favorite,
+        });
 
-        editTaskAsync({id, completed: !completed, message: this.inputFieldRef.current.value });
-
-        this.setState({completed: !completed})
+        this.setState({favorite, completed})
     }
+
 
     componentDidUpdate(prevProps, prevState) {
         if(this.state.toggleEdit !== prevState.toggleEdit) {
@@ -95,7 +98,12 @@ export default class Task extends PureComponent {
     }
 
     render () {
-        const { toggleEdit, completed } = this.state;
+        const { id, actions: {editTaskAsync} } = this.props;
+        const {
+            toggleEdit,
+            completed,
+            favorite,
+        } = this.state;
 
         const styles = cx(Styles.task,  {
             [Styles.completed]: completed,
@@ -110,7 +118,7 @@ export default class Task extends PureComponent {
                         color1 = '#3B8EF3'
                         color2 = '#FFF'
                         checked={completed}
-                        onClick = { this._completedTask }
+                        onClick = { this._updateTask.bind(null, id, !completed, favorite, editTaskAsync) }
                     />
                     <input type = 'text'
                            value = { this.state.value }
@@ -122,11 +130,12 @@ export default class Task extends PureComponent {
                 </div>
                 <div className = { Styles.actions }>
                     <Star
-                        checked
+                        checked = { favorite }
                         inlineBlock
                         className = { Styles.toggleTaskFavoriteState }
                         color1 = '#3B8EF3'
                         color2 = '#000'
+                        onClick = { this._updateTask.bind(null, id, completed, !favorite, editTaskAsync) }
                     />
                     <Edit
                         inlineBlock
