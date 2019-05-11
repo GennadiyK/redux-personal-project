@@ -5,6 +5,7 @@ import { uiActions } from '../../../ui/actions';
 import { getTasks } from '../selectors/getTasks';
 
 export function* completedAllTasks({payload: completed}) {
+    console.log(completed)
 
     try {
         const tasks =  yield select(getTasks);
@@ -14,7 +15,7 @@ export function* completedAllTasks({payload: completed}) {
             return task.set('completed', completed);
         });
 
-        const response = yield apply(api, api.tasks.update, reqData.toJS());
+        const response = yield apply(api, api.tasks.update, [reqData.toJS()]);
 
 
         const { message: resMessage } = yield apply(response, response.json);

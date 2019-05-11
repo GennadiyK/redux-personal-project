@@ -54,7 +54,7 @@ export default class Scheduler extends Component {
     };
 
     _handleCompletedAll = () => {
-        const { actions: { completedAllTasksAsync, fetchTasks } } = this.props;
+        const { actions: { completedAllTasksAsync } } = this.props;
         const { completedAllState } = this.state;
 
         completedAllTasksAsync(!completedAllState);
@@ -71,8 +71,6 @@ export default class Scheduler extends Component {
 
     render () {
         const { tasks: {list}, editingId, isAllCompleted } = this.props;
-        const { completedAllState } = this.state;
-
         const todoList = list.map((task) => {
 
             return (<Task

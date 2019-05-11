@@ -6,7 +6,7 @@ import { uiActions } from '../../../ui/actions';
 export function* updateTask({payload: taskData}) {
     try {
          yield put(uiActions.startFetching());
-        const response = yield apply(api, api.tasks.update, [{...taskData}]);
+        const response = yield apply(api, api.tasks.update, [[{...taskData}]]);
 
         const { message: resMessage } = yield apply(response, response.json);
         if (response.status !== 200) {

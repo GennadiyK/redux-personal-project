@@ -32,10 +32,9 @@ export const api = {
             );
         },
         update (requestData) {
-            console.log('requestData', JSON.stringify(requestData))
             return fetch(`${MAIN_URL}/`, {
                     method:   'PUT',
-                    body:    JSON.stringify([requestData]),
+                    body:    JSON.stringify(requestData),
                     headers: {
                         'Authorization': TOKEN,
                         'Content-Type': 'application/json',

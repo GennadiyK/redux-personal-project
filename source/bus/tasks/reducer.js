@@ -4,7 +4,6 @@ import { fromJS, List } from 'immutable';
 const initialState = {
     editingId: null,
     list: List(),
-    completedAll: null,
 };
 
 export const tasksReducer = (state = initialState, action) => {
