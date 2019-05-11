@@ -19,6 +19,12 @@ export const tasksActions = {
             payload: taskData
         };
     },
+    completedAllTasks: (completed) => {
+       return {
+           type: types.COMPLETED_ALL_TASKS,
+           payload: completed,
+       }
+    },
     editingTask: (id)=> {
         return {
             type: types.EDITING_TASK,
@@ -55,5 +61,11 @@ export const tasksActions = {
             type: types.UPDATE_TASK_ASYNC,
             payload: taskData
         };
+    },
+    completedAllTasksAsync: (completed) => {
+        return {
+            type: types.COMPLETED_ALL_TASKS_ASYNC,
+            payload: completed,
+        }
     },
 };

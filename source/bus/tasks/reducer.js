@@ -4,11 +4,14 @@ import { fromJS, List } from 'immutable';
 const initialState = {
     editingId: null,
     list: List(),
+    completedAll: null,
 };
 
 export const tasksReducer = (state = initialState, action) => {
     switch (action.type) {
         case types.FILL_TASKS:
+        case types.COMPLETED_ALL_TASKS:
+
             return {
                 ...state,
                 list: fromJS(action.payload),

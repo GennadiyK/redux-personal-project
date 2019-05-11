@@ -16,6 +16,7 @@ const mapStateToProps = (state) => {
     return {
         editingId: state.tasks.editingId,
         tasks: state.tasks,
+        isAllCompleted: state.tasks.list.size > 0 ? state.tasks.list.every((task) => task.get("completed")) : false
     };
 };
 
@@ -40,7 +41,7 @@ export default class Scheduler extends Component {
         super(props);
 
         this.state = {
-            completedAll: false,
+            completedAllState: false,
         }
     }
     _createTask = (e) => {
@@ -51,22 +52,26 @@ export default class Scheduler extends Component {
         }
 
     };
-    _toggleCompletedAll = (data) => {
-        const { completedAll } = this.state;
+
+    _handleCompletedAll = () => {
+        const { actions: { completedAllTasksAsync, fetchTasks } } = this.props;
+        const { completedAllState } = this.state;
+
+        completedAllTasksAsync(!completedAllState);
+
         this.setState({
-            completedAll: !completedAll
+            completedAllState: !completedAllState
         })
     }
 
     componentDidMount () {
-        const { actions } = this.props;
-
-        actions.fetchTasks();
+        const { actions: {fetchTasks} } = this.props;
+        fetchTasks();
     }
 
     render () {
-        const { tasks: {list}, editingId } = this.props;
-        const { completedAll} = this.state;
+        const { tasks: {list}, editingId, isAllCompleted } = this.props;
+        const { completedAllState } = this.state;
 
         const todoList = list.map((task) => {
 
@@ -74,7 +79,7 @@ export default class Scheduler extends Component {
                 completed={task.get('completed')}
                 favorite={task.get('favorite')}
                 id={task.get('id')}
-                key={task.get('id')}
+                key={`${task.get('id')}${task.get('completed')}`}
                 editing = {editingId === task.get('id')}
                 message={task.get('message')}
                 {...task}
@@ -104,7 +109,7 @@ export default class Scheduler extends Component {
                         </div>
                     </section>
                     <footer>
-                        <Checkbox checked = { completedAll } onClick={ this._toggleCompletedAll } color1 = '#363636' color2 = '#fff' />
+                        <Checkbox checked = { isAllCompleted } onClick={ this._handleCompletedAll } color1 = '#363636' color2 = '#fff' />
                         <span className = { Styles.completeAllTasks }>
                             Все задачи выполнены
                         </span>
