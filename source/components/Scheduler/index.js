@@ -16,7 +16,7 @@ const mapStateToProps = (state) => {
     return {
         editingId: state.tasks.editingId,
         tasks: state.tasks,
-        isAllCompleted: state.tasks.list.size > 0 ? state.tasks.list.every((task) => task.get("completed")) : false
+        isAllCompleted: state.tasks.list.size > 0 ? state.tasks.list.every((task) => task.get("completed") === true) : false
     };
 };
 
@@ -41,7 +41,7 @@ export default class Scheduler extends Component {
         super(props);
 
         this.state = {
-            completedAllState: false,
+            isAllCompletedState: props.isAllCompleted,
         }
     }
     _createTask = (e) => {
@@ -55,12 +55,12 @@ export default class Scheduler extends Component {
 
     _handleCompletedAll = () => {
         const { actions: { completedAllTasksAsync } } = this.props;
-        const { completedAllState } = this.state;
+        const { isAllCompletedState } = this.state;
 
-        completedAllTasksAsync(!completedAllState);
+        completedAllTasksAsync(!isAllCompletedState);
 
         this.setState({
-            completedAllState: !completedAllState
+            isAllCompletedState: !isAllCompletedState
         })
     }
 
@@ -69,8 +69,17 @@ export default class Scheduler extends Component {
         fetchTasks();
     }
 
+    componentWillUpdate(nextProps, nextState){
+        if(nextProps.isAllCompleted !== nextState.isAllCompletedState) {
+            this.setState({
+                isAllCompletedState: nextProps.isAllCompleted
+            })
+        }
+    }
+
     render () {
-        const { tasks: {list}, editingId, isAllCompleted } = this.props;
+        const { tasks: {list}, editingId } = this.props;
+        const { isAllCompletedState } = this.state;
         const todoList = list.map((task) => {
 
             return (<Task
@@ -107,7 +116,7 @@ export default class Scheduler extends Component {
                         </div>
                     </section>
                     <footer>
-                        <Checkbox checked = { isAllCompleted } onClick={ this._handleCompletedAll } color1 = '#363636' color2 = '#fff' />
+                        <Checkbox checked = { isAllCompletedState } onClick={ this._handleCompletedAll } color1 = '#363636' color2 = '#fff' />
                         <span className = { Styles.completeAllTasks }>
                             Все задачи выполнены
                         </span>
