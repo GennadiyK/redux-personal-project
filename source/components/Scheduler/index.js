@@ -42,6 +42,7 @@ export default class Scheduler extends Component {
 
         this.state = {
             isAllCompletedState: props.isAllCompleted,
+            searchValue: '',
         }
     }
     _createTask = (e) => {
@@ -64,6 +65,10 @@ export default class Scheduler extends Component {
         })
     }
 
+    _handleFilteringTask = (e) => {
+        this.setState({searchValue: e.target.value});
+    }
+
     componentDidMount () {
         const { actions: {fetchTasks} } = this.props;
         fetchTasks();
@@ -79,8 +84,11 @@ export default class Scheduler extends Component {
 
     render () {
         const { tasks: {list}, editingId } = this.props;
-        const { isAllCompletedState } = this.state;
-        const todoList = list.map((task) => {
+        const { isAllCompletedState, searchValue } = this.state;
+
+        const tasksFilteredList = list.filter((item) => item.get('message').includes(searchValue));
+
+        const todoList = tasksFilteredList.map((task) => {
 
             return (<Task
                 completed={task.get('completed')}
@@ -98,7 +106,7 @@ export default class Scheduler extends Component {
                 <main>
                     <header>
                         <h1>Планировщик задач</h1>
-                        <input placeholder = 'Поиск' type = 'search' />
+                        <input placeholder = 'Поиск' type = 'search' onChange={this._handleFilteringTask}/>
                     </header>
                     <section>
                         <form>
