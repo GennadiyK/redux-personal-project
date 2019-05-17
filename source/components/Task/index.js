@@ -127,6 +127,7 @@ export default class Task extends PureComponent {
                            onChange = { this._changeValue }
                            onFocus = { this._submitField }
                            disabled={ toggleEdit }
+                           maxLength="50"
                     />
                 </div>
                 <div className = { Styles.actions }>

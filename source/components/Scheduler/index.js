@@ -1,6 +1,7 @@
 // Core
 import React, { Component, createRef } from 'react';
 import { connect } from 'react-redux';
+import { fromJS } from 'immutable';
 
 // Instruments
 import Styles from './styles.m.css';
@@ -45,6 +46,21 @@ export default class Scheduler extends Component {
             searchValue: '',
         }
     }
+
+    _reoderPriorityTasks = (list) => {
+        let arr = [];
+
+        list.forEach((item) => {
+            if(item.get('favorite')) {
+                arr.unshift(fromJS(item))
+            } else {
+                arr.push(fromJS(item));
+            }
+        })
+
+       return arr;
+    }
+
     _createTask = (e) => {
         e.preventDefault();
 
@@ -83,10 +99,11 @@ export default class Scheduler extends Component {
     }
 
     render () {
-        const { tasks: {list}, editingId } = this.props;
+        const { editingId, tasks: {list}} = this.props;
         const { isAllCompletedState, searchValue } = this.state;
 
-        const tasksFilteredList = list.filter((item) => item.get('message').includes(searchValue));
+        const taskList = this._reoderPriorityTasks(list);
+        const tasksFilteredList = taskList.filter((item) => item.get('message').includes(searchValue));
 
         const todoList = tasksFilteredList.map((task) => {
 
