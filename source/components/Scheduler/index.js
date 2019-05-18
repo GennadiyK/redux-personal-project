@@ -49,16 +49,24 @@ export default class Scheduler extends Component {
 
     _reoderPriorityTasks = (list) => {
         let arr = [];
+        let arrCompleted = []
+        let defaultArr = []
 
         list.forEach((item) => {
-            if(item.get('favorite')) {
+            if(item.get('completed') === true) {
+                if(item.get('favorite')) {
+                    arrCompleted.unshift(fromJS(item))
+                } else {
+                    arrCompleted.push(fromJS(item));
+                }
+            } else if(item.get('favorite')) {
                 arr.unshift(fromJS(item))
             } else {
-                arr.push(fromJS(item));
+                defaultArr.push(fromJS(item));
             }
         })
+        return arr.concat(defaultArr,arrCompleted);
 
-       return arr;
     }
 
     _createTask = (e) => {
